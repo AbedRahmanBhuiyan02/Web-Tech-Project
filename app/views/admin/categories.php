@@ -1,14 +1,16 @@
 <section class="form-shell">
     <h1>Category Management</h1>
-    <form method="post">
+    <form method="post" data-validate="category">
         <input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>">
         <input type="hidden" name="id" value="<?= (int) ($edit['id'] ?? 0) ?>">
         <label>Name <input name="name" value="<?= htmlspecialchars($edit['name'] ?? '') ?>" required></label>
+        <?php if (!empty($errors['name'])): ?><small><?= htmlspecialchars($errors['name']) ?></small><?php endif; ?>
         <label>Type <select name="category_type" required>
             <option value="">Choose type</option>
             <option value="liquid" <?= ($edit['category_type'] ?? '') === 'liquid' ? 'selected' : '' ?>>Liquid</option>
             <option value="solid" <?= ($edit['category_type'] ?? '') === 'solid' ? 'selected' : '' ?>>Solid</option>
         </select></label>
+        <?php if (!empty($errors['category_type'])): ?><small><?= htmlspecialchars($errors['category_type']) ?></small><?php endif; ?>
         <button>Save Category</button>
     </form>
 </section>
