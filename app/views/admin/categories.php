@@ -18,7 +18,10 @@
     <?php foreach ($categories as $category): ?>
         <div class="row">
             <span><?= htmlspecialchars($category['name']) ?> - <?= htmlspecialchars($category['category_type']) ?></span>
-            <a class="button muted" href="<?= BASE_URL ?>?page=admin-categories&edit=<?= (int) $category['id'] ?>">Edit</a>
+            <div class="actions">
+                <a class="button muted" href="<?= BASE_URL ?>?page=admin-categories&edit=<?= (int) $category['id'] ?>">Edit</a>
+                <form method="post"><input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $category['id'] ?>"><button class="danger">Delete</button></form>
+            </div>
         </div>
     <?php endforeach; ?>
 </section>
