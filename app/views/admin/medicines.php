@@ -22,6 +22,7 @@
         <label>Description <textarea name="description" required><?= htmlspecialchars($edit['description'] ?? '') ?></textarea></label>
         <?php if (!empty($errors['description'])): ?><small><?= htmlspecialchars($errors['description']) ?></small><?php endif; ?>
         <label>Image <input type="file" name="image" accept="image/png,image/jpeg"></label>
+        <?php if (!empty($errors['image'])): ?><small><?= htmlspecialchars($errors['image']) ?></small><?php endif; ?>
         <button>Save Medicine</button>
     </form>
 </section>
