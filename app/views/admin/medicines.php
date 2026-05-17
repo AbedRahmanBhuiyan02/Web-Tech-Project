@@ -31,7 +31,10 @@
     <?php foreach ($medicines as $medicine): ?>
         <div class="row">
             <span><?= htmlspecialchars($medicine['name']) ?> - <?= htmlspecialchars($medicine['vendor_name']) ?></span>
-            <a class="button muted" href="<?= BASE_URL ?>?page=admin-medicines&edit=<?= (int) $medicine['id'] ?>">Edit</a>
+            <div class="actions">
+                <a class="button muted" href="<?= BASE_URL ?>?page=admin-medicines&edit=<?= (int) $medicine['id'] ?>">Edit</a>
+                <form method="post"><input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $medicine['id'] ?>"><button class="danger">Delete</button></form>
+            </div>
         </div>
     <?php endforeach; ?>
 </section>
