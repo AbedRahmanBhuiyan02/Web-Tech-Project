@@ -48,3 +48,7 @@ Demo logins:
 - Password for every demo account: `password123`
 
 The seed data also includes demo medicines and sample pending, accepted, and rejected purchase requests.
+
+## Contributors
+
+- [saan25420-lab](https://github.com/saan25420-lab)
