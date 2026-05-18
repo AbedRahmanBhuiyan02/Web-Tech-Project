@@ -49,6 +49,11 @@ document.addEventListener('submit', async (event) => {
     const payload = await post('api-cart-update', new FormData(event.target));
     if (payload.ok) location.reload();
   }
+  if (event.target.matches('.ajax-cart-remove')) {
+    event.preventDefault();
+    const payload = await post('api-cart-remove', new FormData(event.target));
+    if (payload.ok) location.reload();
+  }
 });
 
 document.querySelectorAll('.ajax-status').forEach((button) => {
