@@ -5,12 +5,17 @@
         <input type="hidden" name="id" value="<?= (int) ($edit['id'] ?? 0) ?>">
         <input type="hidden" name="existing_image" value="<?= htmlspecialchars($edit['image_path'] ?? '') ?>">
         <label>Name <input name="name" value="<?= htmlspecialchars($edit['name'] ?? '') ?>" required></label>
+        <label>Type <select name="medicine_type" required>
+            <option value="">Choose type</option>
+            <option value="liquid" <?= ($edit['category_type'] ?? '') === 'liquid' ? 'selected' : '' ?>>Liquid</option>
+            <option value="solid" <?= ($edit['category_type'] ?? '') === 'solid' ? 'selected' : '' ?>>Solid</option>
+        </select><small><?= htmlspecialchars($errors['medicine_type'] ?? '') ?></small></label>
         <label>Category <select name="category_id" required>
             <option value="">Choose category</option>
             <?php foreach ($categories as $category): ?>
-                <option value="<?= (int) $category['id'] ?>" <?= (int) ($edit['category_id'] ?? 0) === (int) $category['id'] ? 'selected' : '' ?>><?= htmlspecialchars($category['name']) ?> (<?= htmlspecialchars($category['category_type']) ?>)</option>
+                <option value="<?= (int) $category['id'] ?>" data-type="<?= htmlspecialchars($category['category_type']) ?>" <?= (int) ($edit['category_id'] ?? 0) === (int) $category['id'] ? 'selected' : '' ?>><?= htmlspecialchars($category['name']) ?> (<?= htmlspecialchars($category['category_type']) ?>)</option>
             <?php endforeach; ?>
-        </select></label>
+        </select><small><?= htmlspecialchars($errors['category_id'] ?? '') ?></small></label>
         <label>Vendor <input name="vendor_name" value="<?= htmlspecialchars($edit['vendor_name'] ?? '') ?>" required></label>
         <label>Price <input type="number" step="0.01" min="0.01" name="price" value="<?= htmlspecialchars($edit['price'] ?? '') ?>" required></label>
         <label>Stock <input type="number" min="0" name="availability" value="<?= htmlspecialchars($edit['availability'] ?? '') ?>" required></label>
@@ -23,7 +28,7 @@
     <h2>Medicines</h2>
     <?php foreach ($medicines as $medicine): ?>
         <div class="row">
-            <span><?= htmlspecialchars($medicine['name']) ?> - <?= htmlspecialchars($medicine['vendor_name']) ?></span>
+            <span><?= htmlspecialchars($medicine['name']) ?> - <?= htmlspecialchars($medicine['vendor_name']) ?> - <?= htmlspecialchars($medicine['category_type']) ?></span>
             <div class="actions">
                 <a class="button muted" href="<?= BASE_URL ?>?page=admin-medicines&edit=<?= (int) $medicine['id'] ?>">Edit</a>
                 <form method="post"><input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>"><input type="hidden" name="action" value="delete"><input type="hidden" name="id" value="<?= (int) $medicine['id'] ?>"><button class="danger">Delete</button></form>

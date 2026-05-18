@@ -7,9 +7,12 @@
     <link rel="stylesheet" href="assets/styles.css">
     <script defer src="assets/app.js"></script>
 </head>
-<body>
+<body class="<?= !empty($_SESSION['user']) && $_SESSION['user']['role'] === 'admin' ? 'admin-layout' : '' ?>">
 <header class="topbar">
-    <a class="brand" href="<?= BASE_URL ?>?page=home">MedDirect Online Medicine Shop</a>
+    <a class="brand" href="<?= BASE_URL ?>?page=home">
+        <img class="brand-logo" src="assets/meddirect-logo.svg" alt="MedDirect logo">
+        <span>MedDirect Online Medicine Shop</span>
+    </a>
     <nav>
         <a class="<?= ($activePage ?? '') === 'home' ? 'active' : '' ?>" href="<?= BASE_URL ?>?page=home">Browse</a>
         <?php if (!empty($_SESSION['user'])): ?>

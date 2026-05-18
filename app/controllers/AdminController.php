@@ -141,6 +141,7 @@ class AdminController extends Controller
     private function medicineInput(array &$errors): ?array
     {
         $name = trim((string) ($_POST['name'] ?? ''));
+        $medicineType = in_array($_POST['medicine_type'] ?? '', ['liquid', 'solid'], true) ? $_POST['medicine_type'] : '';
         $categoryId = (int) ($_POST['category_id'] ?? 0);
         $vendor = trim((string) ($_POST['vendor_name'] ?? ''));
         $price = (float) ($_POST['price'] ?? 0);
@@ -153,6 +154,16 @@ class AdminController extends Controller
         }
         if ($categoryId <= 0) {
             $errors['category_id'] = 'Choose a category.';
+        } else {
+            $category = $this->categories->find($categoryId);
+            if (!$category) {
+                $errors['category_id'] = 'Choose a valid category.';
+            } elseif ($medicineType !== '' && $category['category_type'] !== $medicineType) {
+                $errors['category_id'] = 'Choose a category that matches the selected type.';
+            }
+        }
+        if ($medicineType === '') {
+            $errors['medicine_type'] = 'Choose liquid or solid.';
         }
         if ($vendor === '') {
             $errors['vendor_name'] = 'Vendor name is required.';

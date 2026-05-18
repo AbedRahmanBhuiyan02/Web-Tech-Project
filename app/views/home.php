@@ -9,10 +9,10 @@
 <section class="panel">
     <form class="filters" id="medicine-search">
         <input name="q" value="<?= htmlspecialchars($filters['q']) ?>" placeholder="Search medicine name">
-        <select name="genre">
+        <select name="category_id">
             <option value="">All genres</option>
             <?php foreach ($categories as $category): ?>
-                <option value="<?= htmlspecialchars($category['name']) ?>" <?= $filters['genre'] === $category['name'] ? 'selected' : '' ?>><?= htmlspecialchars($category['name']) ?></option>
+                <option value="<?= (int) $category['id'] ?>" data-type="<?= htmlspecialchars($category['category_type']) ?>" <?= (int) ($filters['category_id'] ?? 0) === (int) $category['id'] ? 'selected' : '' ?>><?= htmlspecialchars($category['name']) ?> (<?= htmlspecialchars($category['category_type']) ?>)</option>
             <?php endforeach; ?>
         </select>
         <select name="vendor">

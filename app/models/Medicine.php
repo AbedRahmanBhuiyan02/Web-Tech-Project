@@ -27,6 +27,10 @@ class Medicine
             $sql .= ' AND m.vendor_name = :vendor';
             $params['vendor'] = $filters['vendor'];
         }
+        if ((int) ($filters['category_id'] ?? 0) > 0) {
+            $sql .= ' AND c.id = :category_id';
+            $params['category_id'] = (int) $filters['category_id'];
+        }
         if (($filters['genre'] ?? '') !== '') {
             $sql .= ' AND c.name = :genre';
             $params['genre'] = $filters['genre'];

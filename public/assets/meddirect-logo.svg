@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 320" role="img" aria-labelledby="title desc">
+  <title id="title">MedDirect logo</title>
+  <desc id="desc">MedDirect Online Medicine Shop logo with capsule icon.</desc>
+  <rect width="360" height="320" fill="none"/>
+  <g fill="none" stroke="#0f6c81" stroke-width="10">
+    <circle cx="180" cy="116" r="86"/>
+    <circle cx="180" cy="116" r="66" stroke-width="5"/>
+  </g>
+  <g transform="rotate(-24 132 174)">
+    <rect x="74" y="148" width="104" height="42" rx="21" fill="#f7bf4f" stroke="#172033" stroke-width="3"/>
+    <path d="M126 148h31a21 21 0 0 1 0 42h-31z" fill="#18799a"/>
+    <path d="M126 150v38" stroke="#172033" stroke-width="3"/>
+    <circle cx="98" cy="181" r="5" fill="#050505"/>
+    <path d="M151 158h16" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+  </g>
+  <g transform="rotate(-8 180 202)">
+    <rect x="138" y="178" width="106" height="42" rx="21" fill="#f7bf4f" stroke="#172033" stroke-width="3"/>
+    <path d="M190 178h33a21 21 0 0 1 0 42h-33z" fill="#18799a"/>
+    <path d="M190 180v38" stroke="#172033" stroke-width="3"/>
+    <circle cx="162" cy="212" r="5" fill="#050505"/>
+    <path d="M216 188h17" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+  </g>
+  <text x="180" y="258" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="45" font-weight="800" fill="#0f6c81" stroke="#064a59" stroke-width="1">MEDDIRECT</text>
+  <line x1="58" y1="270" x2="302" y2="270" stroke="#0f6c81" stroke-width="5"/>
+  <text x="180" y="302" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="27" font-weight="800" fill="#1597aa" stroke="#064a59" stroke-width=".6">Online Medicine Shop</text>
+</svg>

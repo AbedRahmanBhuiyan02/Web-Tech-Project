@@ -22,7 +22,9 @@ document.querySelectorAll('[data-validate]').forEach((form) => {
 
 const search = document.querySelector('#medicine-search');
 if (search) {
-  search.addEventListener('input', async () => {
+  syncTypeCategory(search);
+  const runSearch = async () => {
+    syncTypeCategory(search);
     const params = new URLSearchParams(new FormData(search));
     const response = await fetch(`${baseUrl}?page=api-medicines-search&${params}`);
     const payload = await response.json();
@@ -45,8 +47,15 @@ if (search) {
         ` : ''}
       </article>
     `).join('');
-  });
+  };
+  search.addEventListener('input', runSearch);
+  search.addEventListener('change', runSearch);
 }
+
+document.querySelectorAll('form[data-validate="medicine"]').forEach((form) => {
+  syncTypeCategory(form);
+  form.addEventListener('change', () => syncTypeCategory(form));
+});
 
 document.addEventListener('submit', async (event) => {
   if (event.target.matches('.ajax-add-cart')) {
@@ -99,4 +108,21 @@ function imageFallback(name) {
   fallback.className = 'image-fallback';
   fallback.textContent = String(name || '?').slice(0, 1).toUpperCase();
   return fallback;
+}
+
+function syncTypeCategory(scope) {
+  const typeSelect = scope.querySelector('select[name="type"], select[name="medicine_type"]');
+  const categorySelect = scope.querySelector('select[name="category_id"]');
+  if (!typeSelect || !categorySelect) return;
+
+  const selectedType = typeSelect.value;
+  [...categorySelect.options].forEach((option) => {
+    const optionType = option.dataset.type || '';
+    option.hidden = selectedType !== '' && optionType !== '' && optionType !== selectedType;
+  });
+
+  const selectedOption = categorySelect.selectedOptions[0];
+  if (selectedOption?.hidden) {
+    categorySelect.value = '';
+  }
 }

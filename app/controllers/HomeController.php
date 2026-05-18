@@ -17,8 +17,9 @@ class HomeController extends Controller
         $filters = [
             'q' => trim((string) ($_GET['q'] ?? '')),
             'vendor' => trim((string) ($_GET['vendor'] ?? '')),
+            'category_id' => (int) ($_GET['category_id'] ?? 0),
             'genre' => trim((string) ($_GET['genre'] ?? '')),
-            'type' => trim((string) ($_GET['type'] ?? '')),
+            'type' => in_array($_GET['type'] ?? '', ['liquid', 'solid'], true) ? $_GET['type'] : '',
         ];
 
         $this->view('home', [
