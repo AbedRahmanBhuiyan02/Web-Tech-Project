@@ -41,6 +41,21 @@ class Order
         return $statement->fetchAll();
     }
 
+    public function findForUser(int $orderId, int $userId): ?array
+    {
+        $statement = $this->db->prepare('SELECT o.*, u.name AS customer_name, u.email, u.phone FROM orders o JOIN users u ON u.id = o.user_id WHERE o.id = :id AND o.user_id = :user_id');
+        $statement->execute(['id' => $orderId, 'user_id' => $userId]);
+        $order = $statement->fetch();
+        if (!$order) {
+            return null;
+        }
+
+        $items = $this->db->prepare('SELECT oi.*, m.name, m.vendor_name FROM order_items oi JOIN medicines m ON m.id = oi.medicine_id WHERE oi.order_id = :order_id ORDER BY oi.id');
+        $items->execute(['order_id' => $orderId]);
+        $order['items'] = $items->fetchAll();
+        return $order;
+    }
+
     public function createFromCart(int $userId, array $items, string $address, string $paymentMethod): int
     {
         $total = 0.0;
@@ -97,8 +112,43 @@ class Order
 
     public function updateStatus(int $id, string $status): bool
     {
-        $statement = $this->db->prepare('UPDATE orders SET status = :status WHERE id = :id');
-        return $statement->execute(['status' => $status, 'id' => $id]);
+        if (!in_array($status, ['accepted', 'rejected'], true)) {
+            return false;
+        }
+
+        $this->db->beginTransaction();
+        try {
+            $current = $this->db->prepare('SELECT status FROM orders WHERE id = :id FOR UPDATE');
+            $current->execute(['id' => $id]);
+            $currentStatus = $current->fetchColumn();
+            if (!$currentStatus) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            if ($currentStatus !== 'pending') {
+                $this->db->rollBack();
+                return false;
+            }
+
+            $statement = $this->db->prepare("UPDATE orders SET status = :status WHERE id = :id AND status = 'pending'");
+            $statement->execute(['status' => $status, 'id' => $id]);
+            if ($statement->rowCount() !== 1) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            if ($status === 'rejected') {
+                $restore = $this->db->prepare('UPDATE medicines m JOIN order_items oi ON oi.medicine_id = m.id SET m.availability = m.availability + oi.quantity WHERE oi.order_id = :order_id');
+                $restore->execute(['order_id' => $id]);
+            }
+
+            $this->db->commit();
+            return true;
+        } catch (\Throwable $error) {
+            $this->db->rollBack();
+            throw $error;
+        }
     }
 
     public function pendingCount(): int

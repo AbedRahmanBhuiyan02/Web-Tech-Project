@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Cough syrup bottle">
+  <rect width="640" height="360" fill="#eef4f7"/>
+  <rect x="255" y="52" width="130" height="44" rx="10" fill="#0f6c81"/>
+  <rect x="225" y="88" width="190" height="210" rx="30" fill="#ffffff" stroke="#0f6c81" stroke-width="9"/>
+  <rect x="250" y="145" width="140" height="88" rx="14" fill="#d9f0e2"/>
+  <path d="M280 190h80M320 150v80" stroke="#6a9f58" stroke-width="12" stroke-linecap="round"/>
+  <text x="320" y="326" text-anchor="middle" font-family="Arial" font-size="40" font-weight="700" fill="#172033">Cough Syrup</text>
+</svg>

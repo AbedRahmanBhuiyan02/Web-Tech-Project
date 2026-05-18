@@ -28,20 +28,26 @@ class ApiController extends Controller
     {
         $this->requireRole('customer');
         $this->verifyCsrf();
+        $userId = (int) $_SESSION['user']['id'];
         $medicine = $this->medicines->find((int) ($_POST['medicine_id'] ?? 0));
         $quantity = max(1, (int) ($_POST['quantity'] ?? 1));
-        if (!$medicine || $quantity > (int) $medicine['availability']) {
+        if (!$medicine || $quantity + $this->cart->quantityFor($userId, (int) $medicine['id']) > (int) $medicine['availability']) {
             $this->json(['ok' => false, 'error' => 'Invalid medicine or quantity.'], 422);
         }
-        $this->cart->add((int) $_SESSION['user']['id'], (int) $medicine['id'], $quantity);
-        $this->json(['ok' => true, 'cartCount' => $this->cart->count((int) $_SESSION['user']['id'])]);
+        $this->cart->add($userId, (int) $medicine['id'], $quantity);
+        $this->json(['ok' => true, 'cartCount' => $this->cart->count($userId)]);
     }
 
     public function cartUpdate(): void
     {
         $this->requireRole('customer');
         $this->verifyCsrf();
-        $this->cart->update((int) $_SESSION['user']['id'], (int) ($_POST['medicine_id'] ?? 0), max(0, (int) ($_POST['quantity'] ?? 0)));
+        $medicine = $this->medicines->find((int) ($_POST['medicine_id'] ?? 0));
+        $quantity = max(0, (int) ($_POST['quantity'] ?? 0));
+        if (!$medicine || $quantity > (int) $medicine['availability']) {
+            $this->json(['ok' => false, 'error' => 'Invalid medicine or quantity.'], 422);
+        }
+        $this->cart->update((int) $_SESSION['user']['id'], (int) $medicine['id'], $quantity);
         $this->json(['ok' => true]);
     }
 
@@ -61,7 +67,7 @@ class ApiController extends Controller
         if (!in_array($status, ['accepted', 'rejected'], true)) {
             $this->json(['ok' => false, 'error' => 'Invalid status.'], 422);
         }
-        $this->orders->updateStatus((int) ($_POST['order_id'] ?? 0), $status);
-        $this->json(['ok' => true]);
+        $updated = $this->orders->updateStatus((int) ($_POST['order_id'] ?? 0), $status);
+        $this->json(['ok' => $updated, 'error' => $updated ? null : 'Order could not be updated.'], $updated ? 200 : 422);
     }
 }

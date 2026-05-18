@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Paracetamol tablets">
+  <rect width="640" height="360" fill="#f5f7fb"/>
+  <g transform="rotate(-18 320 180)">
+    <rect x="130" y="120" width="380" height="120" rx="60" fill="#ffffff" stroke="#0f6c81" stroke-width="10"/>
+    <path d="M320 120v120" stroke="#0f6c81" stroke-width="8"/>
+    <rect x="130" y="120" width="190" height="120" rx="60" fill="#d9f0e2"/>
+  </g>
+  <text x="320" y="318" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="#172033">Paracetamol</text>
+</svg>

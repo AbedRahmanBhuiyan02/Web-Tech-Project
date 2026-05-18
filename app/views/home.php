@@ -32,13 +32,17 @@
 <section class="grid cards" id="medicine-list">
     <?php foreach ($medicines as $medicine): ?>
         <article class="card medicine-card">
-            <div class="image-fallback"><?= strtoupper(substr($medicine['name'], 0, 1)) ?></div>
+            <?php if (!empty($medicine['image_path']) && is_file(__DIR__ . '/../../public/' . $medicine['image_path'])): ?>
+                <img class="medicine-image" src="<?= htmlspecialchars($medicine['image_path']) ?>" alt="<?= htmlspecialchars($medicine['name']) ?>">
+            <?php else: ?>
+                <div class="image-fallback"><?= strtoupper(substr($medicine['name'], 0, 1)) ?></div>
+            <?php endif; ?>
             <span class="badge"><?= htmlspecialchars($medicine['category_type']) ?></span>
             <h3><?= htmlspecialchars($medicine['name']) ?></h3>
             <p><?= htmlspecialchars($medicine['description']) ?></p>
             <p><strong><?= htmlspecialchars($medicine['vendor_name']) ?></strong> - <?= htmlspecialchars($medicine['category_name']) ?></p>
             <div class="split">
-                <strong>৳<?= number_format((float) $medicine['price'], 2) ?></strong>
+                <strong>Tk <?= number_format((float) $medicine['price'], 2) ?></strong>
                 <span>Stock <?= (int) $medicine['availability'] ?></span>
             </div>
             <?php if (!empty($_SESSION['user']) && $_SESSION['user']['role'] === 'customer'): ?>

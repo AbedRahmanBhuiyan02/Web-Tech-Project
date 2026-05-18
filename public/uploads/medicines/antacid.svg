@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Antacid suspension bottle">
+  <rect width="640" height="360" fill="#f8fafc"/>
+  <rect x="242" y="48" width="156" height="48" rx="12" fill="#6a9f58"/>
+  <rect x="210" y="90" width="220" height="220" rx="34" fill="#ffffff" stroke="#6a9f58" stroke-width="10"/>
+  <path d="M250 220c45-36 95 36 140 0v48H250z" fill="#e8f7fb"/>
+  <circle cx="285" cy="172" r="18" fill="#0f6c81"/>
+  <circle cx="355" cy="172" r="18" fill="#0f6c81"/>
+  <text x="320" y="338" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="#172033">Antacid</text>
+</svg>

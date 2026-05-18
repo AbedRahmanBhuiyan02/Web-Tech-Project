@@ -55,6 +55,67 @@ class AuthController extends Controller
         $this->view('register', ['title' => 'Register', 'activePage' => 'register', 'csrf' => $this->csrf(), 'errors' => $errors]);
     }
 
+    public function profile(): void
+    {
+        $this->requireLogin();
+        $user = $this->users->find((int) $_SESSION['user']['id']);
+        $errors = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->verifyCsrf();
+            $name = trim((string) ($_POST['name'] ?? ''));
+            $email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+            $address = trim((string) ($_POST['address'] ?? ''));
+            $phone = trim((string) ($_POST['phone'] ?? ''));
+            if ($name === '') {
+                $errors['name'] = 'Name is required.';
+            }
+            if (!$email) {
+                $errors['email'] = 'Valid email is required.';
+            }
+            if ($address === '') {
+                $errors['address'] = 'Address is required.';
+            }
+            if (!$this->validPhone($phone)) {
+                $errors['phone'] = 'Phone must be 11 digits and start with 013, 014, 015, 016, 017, 018, or 019.';
+            }
+
+            $picture = $user['profile_picture'] ?? null;
+            if (!empty($_FILES['profile_picture']['tmp_name'])) {
+                $picture = $this->uploadImage('profile_picture', 'profiles', $errors);
+            }
+
+            if (!empty($_POST['new_password'])) {
+                if (!password_verify((string) ($_POST['current_password'] ?? ''), $user['password_hash'])) {
+                    $errors['current_password'] = 'Current password is incorrect.';
+                } elseif (strlen((string) $_POST['new_password']) < 8) {
+                    $errors['new_password'] = 'New password must be at least 8 characters.';
+                } else {
+                    $this->users->updatePassword((int) $user['id'], password_hash((string) $_POST['new_password'], PASSWORD_DEFAULT));
+                }
+            }
+
+            if (!$errors) {
+                $this->users->updateProfile((int) $user['id'], compact('name', 'email', 'address', 'phone') + ['profile_picture' => $picture]);
+                $_SESSION['user']['name'] = $name;
+                $_SESSION['flash'] = 'Profile updated.';
+                $this->redirect('?page=profile');
+            }
+        }
+
+        $this->view('profile', ['title' => 'Profile', 'activePage' => 'profile', 'csrf' => $this->csrf(), 'user' => $user, 'errors' => $errors]);
+    }
+
+    public function logout(): void
+    {
+        if (!empty($_SESSION['user'])) {
+            $this->users->setRememberToken((int) $_SESSION['user']['id'], null);
+        }
+        setcookie('remember_token', '', time() - 3600, '', '', false, true);
+        session_destroy();
+        $this->redirect('?page=login');
+    }
+
     private function validatedUserInput(array &$errors): ?array
     {
         $name = trim((string) ($_POST['name'] ?? ''));
@@ -76,11 +137,33 @@ class AuthController extends Controller
         if ($address === '') {
             $errors['address'] = 'Address is required.';
         }
-        if ($phone === '') {
-            $errors['phone'] = 'Phone is required.';
+        if (!$this->validPhone($phone)) {
+            $errors['phone'] = 'Phone must be 11 digits and start with 013, 014, 015, 016, 017, 018, or 019.';
         }
 
         return $errors ? null : compact('name', 'email', 'role', 'address', 'phone');
     }
 
+    private function validPhone(string $phone): bool
+    {
+        return (bool) preg_match('/^01[3-9][0-9]{8}$/', $phone);
+    }
+
+    private function uploadImage(string $field, string $folder, array &$errors): ?string
+    {
+        $file = $_FILES[$field];
+        $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
+        $mime = mime_content_type($file['tmp_name']);
+        if (!isset($allowed[$mime]) || $file['size'] > 2 * 1024 * 1024) {
+            $errors[$field] = 'Upload a JPEG or PNG image under 2MB.';
+            return null;
+        }
+        $dir = __DIR__ . '/../../public/uploads/' . $folder;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        $name = bin2hex(random_bytes(12)) . '.' . $allowed[$mime];
+        move_uploaded_file($file['tmp_name'], $dir . '/' . $name);
+        return 'uploads/' . $folder . '/' . $name;
+    }
 }

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Vitamin capsules">
+  <rect width="640" height="360" fill="#e8f7fb"/>
+  <g transform="rotate(24 270 168)">
+    <rect x="150" y="120" width="240" height="96" rx="48" fill="#ffffff" stroke="#0f6c81" stroke-width="9"/>
+    <path d="M270 120v96" stroke="#0f6c81" stroke-width="8"/>
+    <rect x="150" y="120" width="120" height="96" rx="48" fill="#d9f0e2"/>
+  </g>
+  <g transform="rotate(-18 400 205)">
+    <rect x="300" y="168" width="210" height="84" rx="42" fill="#ffffff" stroke="#6a9f58" stroke-width="8"/>
+    <path d="M405 168v84" stroke="#6a9f58" stroke-width="7"/>
+  </g>
+  <text x="320" y="326" text-anchor="middle" font-family="Arial" font-size="40" font-weight="700" fill="#172033">Vitamin C</text>
+</svg>

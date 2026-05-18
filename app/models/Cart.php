@@ -23,6 +23,13 @@ class Cart
         return $statement->execute(['user_id' => $userId, 'medicine_id' => $medicineId, 'quantity' => $quantity]);
     }
 
+    public function quantityFor(int $userId, int $medicineId): int
+    {
+        $statement = $this->db->prepare('SELECT COALESCE(quantity, 0) FROM cart WHERE user_id = :user_id AND medicine_id = :medicine_id');
+        $statement->execute(['user_id' => $userId, 'medicine_id' => $medicineId]);
+        return (int) $statement->fetchColumn();
+    }
+
     public function update(int $userId, int $medicineId, int $quantity): bool
     {
         if ($quantity <= 0) {

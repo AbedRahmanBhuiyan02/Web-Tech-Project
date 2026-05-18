@@ -44,6 +44,9 @@ if (empty($_SESSION['user']) && !empty($_COOKIE['remember_token'])) {
         $_SESSION['user'] = ['id' => (int) $remembered['id'], 'name' => $remembered['name'], 'role' => $remembered['role']];
     }
 }
+if (($_SESSION['user']['role'] ?? '') === 'customer') {
+    $_SESSION['cart_count'] = $cart->count((int) $_SESSION['user']['id']);
+}
 
 $page = (string) ($_GET['page'] ?? 'home');
 
@@ -56,6 +59,7 @@ try {
         'cart' => (new CartController($cart, $orders, $users))->index(),
         'checkout' => (new CartController($cart, $orders, $users))->checkout(),
         'orders' => (new CartController($cart, $orders, $users))->orders(),
+        'invoice' => (new CartController($cart, $orders, $users))->invoice((int) ($_GET['id'] ?? 0)),
         'admin' => (new AdminController($medicines, $categories, $orders, $users))->dashboard(),
         'admin-medicines' => (new AdminController($medicines, $categories, $orders, $users))->medicines(),
         'admin-categories' => (new AdminController($medicines, $categories, $orders, $users))->categories(),
